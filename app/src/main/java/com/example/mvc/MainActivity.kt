@@ -1,5 +1,7 @@
 package com.example.mvc
 
+import android.annotation.SuppressLint
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,10 +15,9 @@ import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var binding : ActivityMainBinding;
+    private lateinit var binding: ActivityMainBinding;
     private lateinit var todoRepository: TodoRepository;
-    private lateinit var adapter : MainAdapter;
-
+    private lateinit var adapter: MainAdapter;
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(layoutInflater);
@@ -29,10 +30,19 @@ class MainActivity : AppCompatActivity() {
 
         todoRepository = TodoRepository(todoDatabase.todoDao());
 
+        binding.btnMove.setOnClickListener {
+            startActivity(
+                Intent(
+                    this,
+                    MemoActivity::class.java
+                )
+            );
+        };
+
         binding.addButton.setOnClickListener {
-          val task = binding.taskEditText.text.toString();
-            if(task.isNotEmpty()) {
-                CoroutineScope(Dispatchers.IO).launch {
+            val task = binding.taskEditText.text.toString();
+            if (task.isNotEmpty()) {
+                CoroutineScope(Dispatchers.IO).launch { // IO작업을 하기 위한 디스패처를 지정 . 시작
                     insertTodoAndLoad();
                 };
             };
@@ -42,8 +52,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun loadTodos() {
         CoroutineScope(Dispatchers.IO).launch {
-          val todos = todoRepository.getAllTodos();
-            withContext(Dispatchers.Main){
+            val todos = todoRepository.getAllTodos();
+            withContext(Dispatchers.Main) {
                 adapter = MainAdapter(todos);
                 binding.todoRecyclerView.layoutManager = LinearLayoutManager(this@MainActivity);
                 binding.todoRecyclerView.adapter = adapter;
@@ -56,7 +66,7 @@ class MainActivity : AppCompatActivity() {
         if (task.isNotEmpty()) {
             val todo = TodoEntity(0, task);
             todoRepository.insertTodo(todo);
-            withContext(Dispatchers.Main) {
+            withContext(Dispatchers.Main) {// 코루틴 메인스레드에서 실행될 때 사용,  해당 코드는 메인 스레드에서 실행
                 binding.taskEditText.text.clear();
             };
             loadTodos();

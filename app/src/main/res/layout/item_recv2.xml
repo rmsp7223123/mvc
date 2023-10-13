@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/container_memo">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1"
+        android:textSize="30dp"
+        android:id="@+id/tv_num"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="30dp"
+        android:text="할일 들어갈공간"
+        android:layout_marginLeft="10dp"
+        android:id="@+id/tv_todoText"/>
+
+</LinearLayout>
