@@ -2,6 +2,10 @@ package com.example.mvc
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.ContextMenu
+import android.view.MenuItem
+import android.view.View
+import android.widget.AdapterView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.room.Room
 import com.example.mvc.databinding.ActivityMemoBinding
@@ -20,6 +24,8 @@ class MemoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState);
         binding = ActivityMemoBinding.inflate(layoutInflater);
         setContentView(binding.root);
+
+        registerForContextMenu(binding.recv);
 
         val memoDatabase = Room.databaseBuilder(
             applicationContext,
@@ -64,5 +70,35 @@ class MemoActivity : AppCompatActivity() {
         };
     };
 
+    override fun onCreateContextMenu(
+        menu: ContextMenu?,
+        v: View?,
+        menuInfo: ContextMenu.ContextMenuInfo?
+    ) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        menuInflater.inflate(R.menu.context_menu, menu);
+    };
+
+    override fun onContextItemSelected(item: MenuItem): Boolean {
+        val info = item.menuInfo as AdapterView.AdapterContextMenuInfo;
+        val memo = adapter.getMemoAtPosition(info.position);
+
+        when (item.itemId) {
+            R.id.edit_memo -> {
+                val editDialog = EditMemoDialog(this, memo) { _ -> }
+                editDialog.show()
+                return true
+            }
+
+            R.id.delete_memo -> {
+                val deleteDialog = DeleteMemoDialog(this) {
+                }
+                deleteDialog.show()
+                return true
+            }
+
+            else -> return super.onContextItemSelected(item)
+        }
+    }
 
 }
