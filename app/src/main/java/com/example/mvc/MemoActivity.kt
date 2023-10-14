@@ -70,35 +70,33 @@ class MemoActivity : AppCompatActivity() {
         };
     };
 
-    override fun onCreateContextMenu(
-        menu: ContextMenu?,
-        v: View?,
-        menuInfo: ContextMenu.ContextMenuInfo?
-    ) {
+    override fun onCreateContextMenu(menu: ContextMenu?, v: View?, menuInfo: ContextMenu.ContextMenuInfo?) {
         super.onCreateContextMenu(menu, v, menuInfo);
+        menu?.clear();
+
         menuInflater.inflate(R.menu.context_menu, menu);
     };
 
     override fun onContextItemSelected(item: MenuItem): Boolean {
-        val info = item.menuInfo as AdapterView.AdapterContextMenuInfo;
-        val memo = adapter.getMemoAtPosition(info.position);
+        val info = item.menuInfo as? AdapterView.AdapterContextMenuInfo;
+        val position = info?.position ?: return super.onContextItemSelected(item);
+        val memo = adapter.getMemoAtPosition(position);
 
-        when (item.itemId) {
+        return when (item.itemId) {
             R.id.edit_memo -> {
-                val editDialog = EditMemoDialog(this, memo) { _ -> }
-                editDialog.show()
-                return true
-            }
+                val editDialog = EditMemoDialog(this, memo) { _ -> };
+                editDialog.show();
+                true;
+            };
 
             R.id.delete_memo -> {
-                val deleteDialog = DeleteMemoDialog(this) {
-                }
-                deleteDialog.show()
-                return true
-            }
+                val deleteDialog = DeleteMemoDialog(this) {};
+                deleteDialog.show();
+                true;
+            };
 
-            else -> return super.onContextItemSelected(item)
-        }
-    }
+            else -> super.onContextItemSelected(item);
+        };
+    };
 
-}
+};
