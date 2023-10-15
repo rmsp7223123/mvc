@@ -9,6 +9,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
@@ -54,7 +55,7 @@ class MemoActivity : AppCompatActivity() {
         CoroutineScope(Dispatchers.IO).launch {
             val memos = repository.getAllMemos();
             withContext(Dispatchers.Main) {
-                adapter = MemoAdapter(memos, this@MemoActivity);
+                adapter = MemoAdapter(memos);
                 binding.recv.layoutManager = LinearLayoutManager(this@MemoActivity);
                 binding.recv.adapter = adapter;
             }
@@ -70,6 +71,25 @@ class MemoActivity : AppCompatActivity() {
                 binding.memoEditText.text.clear();
             };
             loadMemos();
+        };
+    };
+
+    override fun onContextItemSelected(item: MenuItem): Boolean {
+        val position = adapter.getSelectedPosition();
+        return when (item.itemId) {
+            R.id.edit_memo -> {
+                Toast.makeText(this,"수정",Toast.LENGTH_SHORT).show();
+                true;
+            };
+            R.id.delete_memo -> {
+                Toast.makeText(this,"삭제",Toast.LENGTH_SHORT).show();
+                true;
+            };
+            R.id.cancel_memo -> {
+                Toast.makeText(this,"취소",Toast.LENGTH_SHORT).show();
+                true;
+            };
+            else -> super.onContextItemSelected(item);
         };
     };
 

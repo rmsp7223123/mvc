@@ -5,4 +5,7 @@
     <item
         android:id="@+id/delete_memo"
         android:title="Delete" />
+    <item
+        android:id="@+id/cancel_memo"
+        android:title="Cancel" />
 </menu>
