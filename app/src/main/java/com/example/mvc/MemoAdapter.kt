@@ -1,16 +1,20 @@
 package com.example.mvc
 
+import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
+import android.view.MenuInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mvc.databinding.ItemRecv2Binding
 
-class MemoAdapter(private val memos: List<MemoEntity>) :
+class MemoAdapter(private val memos: List<MemoEntity>,private val context : Context) :
     RecyclerView.Adapter<MemoAdapter.ViewHolder>() {
 
-    inner class ViewHolder(var binding: ItemRecv2Binding) : RecyclerView.ViewHolder(binding.root);
+    inner class ViewHolder(var binding: ItemRecv2Binding) : RecyclerView.ViewHolder(binding.root){}
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
@@ -29,15 +33,8 @@ class MemoAdapter(private val memos: List<MemoEntity>) :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.binding.tvNum.text = memos[position].id.toString();
         holder.binding.tvTodoText.text = memos[position].content;
-        holder.binding.tvNum.text = memos[position].id.toString();
-        holder.binding.tvTodoText.text = memos[position].content;
-        holder.itemView.setOnCreateContextMenuListener { menu, _, _ ->
-            menu.add(Menu.NONE, R.id.edit_memo, Menu.NONE, "Edit")
-            menu.add(Menu.NONE, R.id.delete_memo, Menu.NONE, "Delete")
-        }
-    };
-
-    fun getMemoAtPosition(position: Int): MemoEntity {
-        return memos[position];
+        holder.binding.containerMemo.setOnClickListener {
+            Toast.makeText(context, "토스트 메세지 띄우기 입니다.", Toast.LENGTH_SHORT).show();
+        };
     };
 }

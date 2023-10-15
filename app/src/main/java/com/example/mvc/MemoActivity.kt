@@ -1,12 +1,16 @@
 package com.example.mvc
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.ContextMenu
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
 import com.example.mvc.databinding.ActivityMemoBinding
 import kotlinx.coroutines.CoroutineScope
@@ -42,8 +46,7 @@ class MemoActivity : AppCompatActivity() {
                 };
             };
         }
-
-        loadMemos();
+            loadMemos();
     };
 
 
@@ -51,7 +54,7 @@ class MemoActivity : AppCompatActivity() {
         CoroutineScope(Dispatchers.IO).launch {
             val memos = repository.getAllMemos();
             withContext(Dispatchers.Main) {
-                adapter = MemoAdapter(memos);
+                adapter = MemoAdapter(memos, this@MemoActivity);
                 binding.recv.layoutManager = LinearLayoutManager(this@MemoActivity);
                 binding.recv.adapter = adapter;
             }
@@ -67,35 +70,6 @@ class MemoActivity : AppCompatActivity() {
                 binding.memoEditText.text.clear();
             };
             loadMemos();
-        };
-    };
-
-    override fun onCreateContextMenu(menu: ContextMenu?, v: View?, menuInfo: ContextMenu.ContextMenuInfo?) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        menu?.clear();
-
-        menuInflater.inflate(R.menu.context_menu, menu);
-    };
-
-    override fun onContextItemSelected(item: MenuItem): Boolean {
-        val info = item.menuInfo as? AdapterView.AdapterContextMenuInfo;
-        val position = info?.position ?: return super.onContextItemSelected(item);
-        val memo = adapter.getMemoAtPosition(position);
-
-        return when (item.itemId) {
-            R.id.edit_memo -> {
-                val editDialog = EditMemoDialog(this, memo) { _ -> };
-                editDialog.show();
-                true;
-            };
-
-            R.id.delete_memo -> {
-                val deleteDialog = DeleteMemoDialog(this) {};
-                deleteDialog.show();
-                true;
-            };
-
-            else -> super.onContextItemSelected(item);
         };
     };
 
