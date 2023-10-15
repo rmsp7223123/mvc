@@ -12,7 +12,7 @@ import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mvc.databinding.ItemRecv2Binding
 
-class MemoAdapter(private val memos: List<MemoEntity>) :
+class MemoAdapter(val memos: List<MemoEntity>) :
     RecyclerView.Adapter<MemoAdapter.ViewHolder>() {
 
     private var selectedPosition: Int? = null;

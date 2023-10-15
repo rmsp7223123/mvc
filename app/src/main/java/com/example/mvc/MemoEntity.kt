@@ -7,5 +7,5 @@ import androidx.room.PrimaryKey
 class MemoEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
-    val content: String
+    var content: String
 )
